@@ -1,0 +1,58 @@
+EXAMPLE 1
+=============================================================================================================================================================
+
+#include <iostream>         : includes the standard input-output stream library, which allows you to use cout for printing output to the console.
+using namespace std;        :Allows use of standard library names.
+int main(){                 :Starts the main function.
+cout << "Hello, World!";    :Prints the word "Hello, World!".
+return 0;                   :Ends the program successfully.
+}                           :Closes the main function.
+
+EXAMPLE 2
+=============================================================================================================================================================
+
+#include <iostream>                          :Includes the input/output stream library for console operations.
+using namespace std;                         :Uses standard library names.
+int main() {                                 :Starts the main function.
+int age = 20;                                :Defines an integer variable age.
+double price = 19.99;                        :Defines a double variable price.
+char grade = 'A';                            :Defines a character variable grade.
+string name = "Alice";                       :Defines a string variable name.
+cout << "Name: " << name << endl;            :Prints word"Name: Alice".                                                                                                                                                                                                                                                                                        
+cout << "Age: " << age << endl;              :Prints "Age: 20".
+cout << "Price: $" << price << endl;         :Prints "Price: $19.99".
+cout << "Grade: " << grade << endl;          :Prints "Grade: A".
+return 0;                                    :Ends the program successfully.
+}                                            :Closes the main function.
+
+EXAMPLE 3
+===========================================================================================================================================================
+
+#include <iostream>                        :Includes the input/output stream library for console operations.
+using namespace std;                       :Uses standard library names.
+int main() {                               :Starts the main function.
+string name;                               :Declares a variable named name of type string to store the user's name.
+int age;                                   :Declares a variable named age of type int to store the user's age
+cout << "Enter your name: ";               :Displays the prompt "Enter your name:" to the user.
+cin >> name;                               :Reads the user's input and stores it in the name variable.
+cout << "Enter your age: ";                :Displays the prompt "Enter your age:" to the user.
+cin >> age;                                :Reads the user's input and stores it in the age variable.
+cout << "Hello, " << name << "! You are " << age << " years old." << endl;  :Prints a greeting that includes the user's name and age, followed by a newline.
+return 0;                                  :Ends the main function and returns 0 to indicate successful execution.
+}                                          :Closes the main function.
+
+EXAMPLE 4
+===========================================================================================================================================================
+#include<iostream>                       :Includes the input/output stream library for console operations.
+using namespace std;                     :Uses standard library names.       
+int main(){                              :Starts the main function.
+int a = 10, b = 3;                       :Declares two integer variables a and b, initialized to 10 and 3, respectively.
+cout << "Sum: " << a + b << endl;        :Calculates and prints the sum of a and b.
+cout << "Difference: " << a - b << endl; :Calculates and prints the difference between a and b.
+cout << "Product: " << a * b << endl;    :Calculates and prints the product of a and b.
+cout << "Quotient: " << a / b << endl;   :Calculates and prints the quotient of a divided by b (integer division).
+cout << "Remainder: " << a % b << endl;  :Calculates and prints the remainder of a divided by b (modulus operation).
+return 0;                                :Ends the main function and returns 0 to indicate successful execution.
+}                                        :Closes the main function.
+
+
