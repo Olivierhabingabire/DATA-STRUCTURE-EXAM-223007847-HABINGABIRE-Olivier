@@ -1,0 +1,169 @@
+Project Title: Restaurant Ordering System
+
+Assigned Task
+
+The assigned task was to build a Restaurant Ordering System using Object-Oriented Programming (OOP) principles in C++. The system needed to display a menu of food items and allow the user to place different types of orders: Dine-In or Take-Out. The program should support features like adding orders, viewing current orders, and removing any order from the list. To meet OOP standards, the design had to include an abstract base class, polymorphism, and dynamic memory allocation. Each type of order (dine-in or take-out) would implement specific rules: a service fee for dine-in and a packaging fee for take-out. Lastly, proper memory handling was required to avoid memory leaks when deleting orders or exiting the program.
+
+How It Was Completed
+
+To complete the project, a menu was defined using a fixed array of MenuItem structures, each holding the name and price of the food item. An abstract class called Order was created to represent a general order. This class had pure virtual functions, such as getTotal() and display(), ensuring that every derived class would implement its own version. Two classes, DineInOrder and TakeOutOrder, inherited from Order, and each implemented the getTotal() function to apply the appropriate fees.
+
+Orders were stored in a vector of pointers to the base class (vector<Order*>) to support polymorphism. The program dynamically allocated memory for each new order using new, and later freed it with delete to prevent memory leaks. The user could interact with the system through a menu-driven interface that allowed them to view the menu, add a new order, view existing orders, remove an order by number, or exit the system. All features were implemented with a strong focus on modular design, memory safety, and user-friendly flow.
+
+Code Overview with Comments:
+
+#include <iostream>       // Required for standard input and output operations
+#include <vector>         // Used to store orders dynamically
+#include <cstring>        // Enables use of C-style strings
+using namespace std;      // Avoids having to use std:: prefix
+
+// Structure to represent each item on the menu
+struct MenuItem {
+    char name[30];        // Name of the item
+    float price;          // Price of the item
+};
+
+// Abstract base class representing a general order
+class Order {
+public:
+    virtual float getTotal() = 0;   // Pure virtual function to get the total cost of the order
+    virtual void display() = 0;     // Pure virtual function to display the order info
+    virtual ~Order() {}             // Virtual destructor for proper cleanup
+};
+
+// DineInOrder class inheriting from Order
+class DineInOrder : public Order {
+    float subtotal;                 // Subtotal of the order before fees
+public:
+    DineInOrder(float total) : subtotal(total) {} // Constructor to initialize subtotal
+    float getTotal() override {
+        return subtotal + (subtotal * 0.10);       // Adds 10% service charge
+    }
+    void display() override {
+        cout << "[Dine-In Order] Total: $" << getTotal() << endl; // Displays dine-in order
+    }
+};
+
+// TakeOutOrder class inheriting from Order
+class TakeOutOrder : public Order {
+    float subtotal;                 // Subtotal of the order before fees
+public:
+    TakeOutOrder(float total) : subtotal(total) {} // Constructor to initialize subtotal
+    float getTotal() override {
+        return subtotal + 0.50;                    // Adds flat $0.50 packaging fee
+    }
+    void display() override {
+        cout << "[Take-Out Order] Total: $" << getTotal() << endl; // Displays take-out order
+    }
+};
+
+// Predefined menu with 5 items
+MenuItem menu[5] = {
+    {"Burger", 5.99},
+    {"Fries", 2.99},
+    {"Pizza", 7.49},
+    {"Salad", 4.99},
+    {"Soda", 1.49}
+};
+
+// Vector to store pointers to orders dynamically
+vector<Order*> orders;
+
+// Displays the static menu
+void showMenu() {
+    cout << "\n---- MENU ----\n";
+    for (int i = 0; i < 5; ++i) {
+        cout << i + 1 << ". " << menu[i].name << " - $" << menu[i].price << endl; // Print each menu item
+    }
+}
+
+// Handles user input for selecting items and calculates subtotal
+float takeOrderInput() {
+    int choice;
+    float total = 0;
+    do {
+        showMenu(); // Display menu each time
+        cout << "Enter item number (0 to finish): ";
+        cin >> choice;
+        if (choice > 0 && choice <= 5) {
+            total += menu[choice - 1].price; // Add selected item's price to total
+        }
+    } while (choice != 0); // Continue until user enters 0
+    return total; // Return subtotal
+}
+
+// Displays all current orders
+void viewOrders() {
+    cout << "\n--- Orders Summary ---\n";
+    for (int i = 0; i < orders.size(); ++i) {
+        cout << "Order #" << i + 1 << ": ";
+        orders[i]->display(); // Polymorphic call to display function
+    }
+}
+
+// Removes an order by its index
+void removeOrder() {
+    int index;
+    cout << "Enter order number to remove (1-based index): ";
+    cin >> index;
+    if (index >= 1 && index <= orders.size()) {
+        delete orders[index - 1]; // Free memory
+        orders.erase(orders.begin() + index - 1); // Remove from vector
+        cout << "Order removed.\n";
+    } else {
+        cout << "Invalid order number.\n";
+    }
+}
+
+// Entry point of the program
+int main() {
+    int choice;
+    do {
+        // Main menu for user interaction
+        cout << "\n---- Restaurant Order System ----\n";
+        cout << "1. Show Menu\n";
+        cout << "2. Add Dine-In Order\n";
+        cout << "3. Add Take-Out Order\n";
+        cout << "4. View Orders\n";
+        cout << "5. Remove Order\n";
+        cout << "6. Exit\n";
+        cout << "Choose: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                showMenu(); // Show menu
+                break;
+            case 2: {
+                float total = takeOrderInput(); // Get order subtotal
+                orders.push_back(new DineInOrder(total)); // Add dine-in order
+                break;
+            }
+            case 3: {
+                float total = takeOrderInput(); // Get order subtotal
+                orders.push_back(new TakeOutOrder(total)); // Add take-out order
+                break;
+            }
+            case 4:
+                viewOrders(); // Show all orders
+                break;
+            case 5:
+                removeOrder(); // Remove specific order
+                break;
+            case 6:
+                cout << "Exiting...\n"; // Exit message
+                break;
+            default:
+                cout << "Invalid choice!\n"; // Handle wrong input
+        }
+
+    } while (choice != 6); // Loop until exit
+
+    // Free all remaining dynamically allocated orders
+    for (Order* order : orders) {
+        delete order;
+    }
+    orders.clear(); // Clear vector
+
+    return 0; // End program
+}
